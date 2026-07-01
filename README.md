@@ -5,10 +5,9 @@
 > Два модуля, которые закрывают арбитраж с двух разных сторон: **ARB ASSISTANT** ведёт вас по полному циклу сделки (поиск → анализ → открытие → закрытие → обучение на истории), а **S-DIT SCANNER + BORROW CHECKER** ловит момент ДО визуального пампа и проверяет, физически ли доступен займ для шорта, пока другие боты уже выгребли пул.
 
 ![status](https://i.ibb.co.com/9HrS2WGv/image.png)
-![status2](https://i.ibb.co.com/XfvrqTNJ/image.png)
-![bot](https://i.ibb.co.com/rGWmpqzP/image.png)
-![bot](https://i.ibb.co.com/gbTgFCQK/image.png)
-![bot](https://i.ibb.co.com/KcXz101v/image.png)
+![status2](https://i.ibb.co.com/HLkfjQ1g/image.png)
+![bot](https://i.ibb.co.com/vxtHdfT5/image.png)
+![bot](https://i.ibb.co.com/TD8hq5J3/image.png)
 
 
 ```
