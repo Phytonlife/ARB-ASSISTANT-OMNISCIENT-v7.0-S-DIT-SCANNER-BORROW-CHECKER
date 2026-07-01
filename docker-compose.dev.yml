@@ -1,0 +1,30 @@
+version: "3.9"
+
+# Режим разработки: только Redis + Bot + SQLite (без PostgreSQL)
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --maxmemory 32mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  bot:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=sqlite+aiosqlite:///./data/arb.db
+    volumes:
+      - ./data:/app/data
+      - ./data/strategies:/app/data/strategies
+      - .:/app   # hot-reload в dev
+    depends_on:
+      redis:
+        condition: service_healthy
+
+# Запуск: docker-compose -f docker-compose.dev.yml up

@@ -1,0 +1,11 @@
+Funding Arb (perp-perp): diff > 0.30%, net = diff - 0.075%, нет withdraw
+Spread Arb (spot-perp): net = gross - fee_a - fee_b - wd_usd/size*100
+При позиции $50: withdraw $1 = 2.0% стоимости! Нужен gross > 2.15%
+Listing Arb Фаза 1: первые 6ч после листинга — самое жирное окно
+Listing Arb Фаза 0: ещё до старта торгов — самый высокий риск
+Index Arb: KuCoin индекс включал Bitmart (-5-10%), разница 5-8% неделями
+Delisting Arb: лонг делистируемый + шорт другая биржа — высокий риск ликвидности
+Pool Arb: анонс пула = предсказуемый спрос, входи заранее
+Binance Rate Ramp: rate > 1.5% = цикл ускоряется = рампа
+Gate Exploit: Gate инертный, переходит медленно, лонг за 2-3ч до выплаты
+Strategy Rank: Funding 8.5/10, Listing 6/10, Index 5/10, Ramp 4/10, Spread 3.5/10

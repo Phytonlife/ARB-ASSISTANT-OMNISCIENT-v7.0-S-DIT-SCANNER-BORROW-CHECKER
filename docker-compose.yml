@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  # ── Redis: API кэш + Oracle кэш ─────────────────────────────
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: >
+      redis-server
+      --maxmemory 64mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── PostgreSQL: основная БД (v2, опциональный) ───────────────
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-arb}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-arb_secret_2024}
+      POSTGRES_DB: ${POSTGRES_DB:-arb_db}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-arb} -d ${POSTGRES_DB:-arb_db}"]
+      interval: 30s
+      retries: 5
+
+  # ── ARB Assistant Bot ─────────────────────────────────────────
+  bot:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      # Раскомментировать для PostgreSQL v2:
+      - DATABASE_URL=postgresql+asyncpg://arb:arb_secret_2024@postgres:5432/arb_db
+    volumes:
+      - ./data:/app/data          # SQLite + логи
+      - ./data/strategies:/app/data/strategies  # RAG документы
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+volumes:
+  redis_data:
+  pg_data:
+
+# ── Команды ──────────────────────────────────────────────────────────
+# Запуск:       docker-compose up -d
+# Логи:         docker-compose logs -f bot
+# Перезапуск:   docker-compose restart bot
+# Остановка:    docker-compose down
+# Полная очистка: docker-compose down -v
+# RAM сейчас:   docker stats --no-stream
